@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Services\Exchange\Contracts\CryptoExchangeInterface;
 use App\Services\Exchange\CryptoExchanges\Binance;
 use App\Services\Exchange\CryptoExchangesResolver;
-use App\Services\Exchange\ExchangeService;
 use App\Services\Exchange\Routes\Contracts\RouteFinderServiceInterface;
 use App\Services\Exchange\Routes\RouteFinderService;
 use App\Services\Exchange\Trading\CalculateTradeService;
@@ -27,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CryptoExchangeInterface::class, Binance::class);
         $this->app->bind(CcxtBaseExchange::class, CcxtBinanceExchange::class);
         $this->app->bind(CalculateTradeServiceInterface::class, CalculateTradeService::class);
-        $this->app->bind(ExchangeService::class);
 
         $this->app
             ->when(CryptoExchangesResolver::class)

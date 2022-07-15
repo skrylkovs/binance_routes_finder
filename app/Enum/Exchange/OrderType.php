@@ -14,7 +14,7 @@ enum OrderType
     public static function fromColumn(string $column): self
     {
         $column = strtoupper($column);
-        if(!defined("self::" . $column)){
+        if (!defined("self::" . $column)) {
             throw new UnknownOrderTypeException("Unknown orderbook column $column");
         }
 

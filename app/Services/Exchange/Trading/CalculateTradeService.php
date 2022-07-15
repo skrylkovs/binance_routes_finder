@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Exchange\Trading;
 
 use App\Services\Exchange\Contracts\CryptoExchangeInterface;
@@ -11,7 +13,7 @@ class CalculateTradeService implements CalculateTradeServiceInterface
 {
     public function __construct(
         protected CryptoExchangeInterface $cryptoExchange,
-    ){
+    ) {
     }
 
     public function calculateTargetQuantity(Orderbook $orderbook, float $neededQuantity): float
@@ -19,7 +21,7 @@ class CalculateTradeService implements CalculateTradeServiceInterface
         $orders = $orderbook->orders;
         $type = $orderbook->type;
 
-        if($this->isOrdersEnough($orders, $neededQuantity) === false){
+        if ($this->isOrdersEnough($orders, $neededQuantity) === false) {
             throw new OrdersIsNotEnoughException("Trading amount is not enough for deal");
         }
 
@@ -28,18 +30,17 @@ class CalculateTradeService implements CalculateTradeServiceInterface
         $targetQuantity = 0;
         $i = 0;
 
-        while($neededQuantity > 0)
-        {
+        while ($neededQuantity > 0) {
             $order = $orders[$i];
 
-            if(!isset($orders[$i])){
+            if (!isset($orders[$i])) {
                 throw new OrdersIsNotEnoughException("Trading amount is not enough for deal");
             }
 
             $orderAmount = $order->amount;
             $orderPrice = $order->price;
 
-            if($orderAmount > $neededQuantity){
+            if ($orderAmount > $neededQuantity) {
                 $orderAmount = $neededQuantity;
             }
 
@@ -59,8 +60,7 @@ class CalculateTradeService implements CalculateTradeServiceInterface
 
     private function calculateOrderbookQuantity(array $orders): float
     {
-        $quantity = array_reduce($orders, function($temp, $order)
-        {
+        $quantity = array_reduce($orders, function ($temp, $order) {
             return $temp + $order->amount;
         });
 
@@ -69,8 +69,7 @@ class CalculateTradeService implements CalculateTradeServiceInterface
 
     private function isOrdersEnough(array $orders, float $neededQuantity): bool
     {
-        if($neededQuantity > $this->calculateOrderbookQuantity($orders))
-        {
+        if ($neededQuantity > $this->calculateOrderbookQuantity($orders)) {
             return false;
         }
 

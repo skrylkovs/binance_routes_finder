@@ -23,7 +23,7 @@ class CryptoExchangesResolver
 
     public function make(string $name): CryptoExchangeInterface
     {
-        if(!isset($this->mapping[$name])){
+        if (!isset($this->mapping[$name])) {
             throw new UnknownCryptoExchangeException("Unknown exchange $name");
         }
 

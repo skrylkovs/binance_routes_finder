@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Exchange\CryptoExchanges;
 
 use App\Services\Exchange\Contracts\CryptoExchangeInterface;
+use App\Services\Exchange\Exceptions\RequestErrorException;
 use ccxt\Exchange as CcxtBaseExchange;
 use Psr\Log\LoggerInterface;
 use Psy\Exception\FatalErrorException;
@@ -25,8 +28,7 @@ class Binance extends BaseCryptoExchange implements CryptoExchangeInterface
     public function __construct(
         protected LoggerInterface  $logger,
         protected CcxtBaseExchange $ccxtBinanceExchange
-    )
-    {
+    ) {
     }
 
     public function getAvailablePairs(): array
@@ -58,7 +60,7 @@ class Binance extends BaseCryptoExchange implements CryptoExchangeInterface
         } catch (Throwable $exception) {
             $this->logger->error("Request error to exchange " . $this->getName(), [$exception, $url]);
 
-            throw new FatalErrorException($exception->getMessage(), previous: $exception);
+            throw new RequestErrorException($exception->getMessage(), previous: $exception);
         }
     }
 }

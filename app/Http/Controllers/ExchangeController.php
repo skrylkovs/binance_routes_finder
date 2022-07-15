@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Services\Exchange\Routes\Contracts\RouteFinderServiceInterface;
@@ -17,14 +19,13 @@ class ExchangeController extends Controller
             [
                 "subject" => "ETH",
                 "target" => "XEM",
-                "quantity" => 0.009
+                "quantity" => 0.09
             ],
             [
                 "subject" => "BTC",
                 "target" => "USDT",
                 "quantity" => 0.56
             ],
-            /*
             [
                 "subject" => "XLM",
                 "target" => "ETH",
@@ -35,16 +36,17 @@ class ExchangeController extends Controller
                 "target" => "XLM",
                 "quantity" => 15
             ],
-            */
         ];
 
-        foreach ($data as $deal){
-            $key = $deal["subject"] . "-" .  $deal["target"];
+        foreach ($data as $deal) {
+            $key = $deal["subject"] . " -> " .  $deal["target"];
             $routes = $this->routeFinderService->createRoutes($deal["subject"], $deal["target"], $deal["quantity"]);
-            $results[$key] = $this->routeFinderService->parseTotalQuantities($routes);
+            $results[$key]["way"] = $this->routeFinderService->parseTotalQuantities($routes);
+            $results[$key]["quantity"] = $deal["quantity"];
         }
 
-        print_r($results);exit;
+        print_r($results);
+        exit;
         return View::make('exchange', ['results' => $results]);
     }
 }

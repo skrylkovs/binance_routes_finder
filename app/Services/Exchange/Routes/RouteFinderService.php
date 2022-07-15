@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Exchange\Routes;
 
 use App\Enum\Exchange\OrderType;
 use App\Services\Exchange\CryptoExchangesResolver;
+use App\Services\Exchange\Exceptions\ExchangeException;
 use App\Services\Exchange\Dto\{Trade, TradePair};
 use App\Services\Exchange\Routes\Contracts\RouteFinderServiceInterface;
 use App\Services\Exchange\Trading\Contracts\CalculateTradeServiceInterface;
@@ -11,18 +14,19 @@ use Psr\Log\LoggerInterface;
 
 class RouteFinderService implements RouteFinderServiceInterface
 {
-    const ORDERBOOK_LIMIT = 1000;
+    public const ORDERBOOK_LIMIT = 500;
 
     protected $subject;
     protected $target;
+    protected $amount;
     protected $suitedPairs;
+    protected $cryptoExchange;
 
     public function __construct(
         protected CryptoExchangesResolver        $cryptoExchangesResolver,
         protected CalculateTradeServiceInterface $calculateTradeService,
         protected LoggerInterface                $logger
-    )
-    {
+    ) {
         $this->cryptoExchange = $this->cryptoExchangesResolver->make(config("exchange.default"));
     }
 
@@ -86,11 +90,13 @@ class RouteFinderService implements RouteFinderServiceInterface
     {
         $pair = $route[0];
 
-        if (count($route) == 1 && in_array($this->subject, $pair) === false)
+        if (count($route) == 1 && in_array($this->subject, $pair) === false) {
             return false;
+        }
 
-        if (count($route) == 1 && in_array($this->target, $pair) === false)
+        if (count($route) == 1 && in_array($this->target, $pair) === false) {
             return false;
+        }
 
         return true;
     }
@@ -107,16 +113,23 @@ class RouteFinderService implements RouteFinderServiceInterface
     protected function fillPairsQuantity()
     {
         foreach ($this->suitedPairs as $currency => $route) {
-            foreach ($route as $key => $pair) {
-                $orderbook = $this->cryptoExchange->getOrderBook($pair['baseAsset'] . $pair['quoteAsset'], self::ORDERBOOK_LIMIT);
-                $orderbook = $this->cryptoExchange->parseOrderBook($orderbook, $pair['type']->getLowerCaseName());
+            try {
+                foreach ($route as $key => $pair) {
+                    $orderbook = $this->cryptoExchange->getOrderBook($pair['baseAsset'] . $pair['quoteAsset'], self::ORDERBOOK_LIMIT);
+                    $orderbook = $this->cryptoExchange->parseOrderBook($orderbook, $pair['type']->getLowerCaseName());
 
-                $amount = $currentQuantity ?? $this->amount;
+                    $amount = $currentQuantity ?? $this->amount;
 
-                $this->suitedPairs[$currency][$key]['quantity'] = $this->amount;
-                $currentQuantity = $this->suitedPairs[$currency][$key]['resultQuantity'] = $this->calculateTradeService->calculateTargetQuantity($orderbook, $amount);
+                    $this->suitedPairs[$currency][$key]['quantity'] = $this->amount;
+                    $currentQuantity = $this->suitedPairs[$currency][$key]['resultQuantity'] = $this->calculateTradeService->calculateTargetQuantity($orderbook, $amount);
+                }
+                unset($currentQuantity);
+            } catch (ExchangeException $exception) {
+                $this->logger->error("Catched exchange exception", [$exception]);
+                unset($this->suitedPairs[$currency]);
+
+                continue;
             }
-            unset($currentQuantity);
         }
     }
 
@@ -153,7 +166,7 @@ class RouteFinderService implements RouteFinderServiceInterface
             $route = round(end($route["pairs"])->resultQuantity, 10);
         }
 
-        rsort($routes);
+        arsort($routes);
 
         return $routes;
     }

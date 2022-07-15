@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Exchange\Contracts;
 
 use App\Services\Exchange\Dto\Orderbook;

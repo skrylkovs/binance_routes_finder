@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Exchange\CryptoExchanges;
 
 use App\Enum\Exchange\OrderType;
@@ -7,6 +9,9 @@ use App\Services\Exchange\Dto\{Orderbook, OrderbookRow};
 
 abstract class BaseCryptoExchange
 {
+    protected string $name;
+    protected float $tradeFee;
+
     public function getName(): string
     {
         return $this->name;
