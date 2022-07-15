@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Exchange\Routes;
 
 use App\Enum\Exchange\OrderType;
-use App\Services\Exchange\Contracts\CryptoExchangeInterface;
+use App\Services\Exchange\Contracts\OrdersServiceInterface;
 use App\Services\Exchange\CryptoExchangesResolver;
 use App\Services\Exchange\Exceptions\ExchangeException;
 use App\Services\Exchange\Dto\{Trade, TradePair};
@@ -21,7 +21,7 @@ final class RouteFinderService implements RouteFinderServiceInterface
     protected string $target;
     protected float $amount;
     protected array $suitedPairs;
-    protected CryptoExchangeInterface $cryptoExchange;
+    protected OrdersServiceInterface $cryptoExchange;
 
     public function __construct(
         protected CryptoExchangesResolver        $cryptoExchangesResolver,

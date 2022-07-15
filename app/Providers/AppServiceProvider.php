@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Services\Exchange\Contracts\CryptoExchangeInterface;
+use App\Services\Exchange\Contracts\OrdersServiceInterface;
 use App\Services\Exchange\CryptoExchanges\Binance;
 use App\Services\Exchange\CryptoExchangesResolver;
 use App\Services\Exchange\Routes\Contracts\RouteFinderServiceInterface;
@@ -25,13 +25,13 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(RouteFinderServiceInterface::class, RouteFinderService::class);
-        $this->app->bind(CryptoExchangeInterface::class, Binance::class);
+        $this->app->bind(OrdersServiceInterface::class, Binance::class);
         $this->app->bind(CcxtBaseExchange::class, CcxtBinanceExchange::class);
         $this->app->bind(CalculateTradeServiceInterface::class, CalculateTradeService::class);
 
         $this->app
             ->when(CryptoExchangesResolver::class)
-            ->needs(CryptoExchangeInterface::class)
+            ->needs(OrdersServiceInterface::class)
             ->give(function ($app) {
                 return [
                     $app->make(Binance::class),

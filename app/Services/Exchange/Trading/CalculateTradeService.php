@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Exchange\Trading;
 
-use App\Services\Exchange\Contracts\CryptoExchangeInterface;
+use App\Services\Exchange\Contracts\OrdersServiceInterface;
 use App\Services\Exchange\Trading\Contracts\CalculateTradeServiceInterface;
 use App\Services\Exchange\Dto\Orderbook;
 use App\Services\Exchange\Exceptions\OrdersIsNotEnoughException;
@@ -12,7 +12,7 @@ use App\Services\Exchange\Exceptions\OrdersIsNotEnoughException;
 class CalculateTradeService implements CalculateTradeServiceInterface
 {
     public function __construct(
-        protected CryptoExchangeInterface $cryptoExchange,
+        protected OrdersServiceInterface $cryptoExchange,
     ) {
     }
 
