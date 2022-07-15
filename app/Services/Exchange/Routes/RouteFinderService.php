@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Exchange\Routes;
 
 use App\Enum\Exchange\OrderType;
+use App\Services\Exchange\Contracts\CryptoExchangeInterface;
 use App\Services\Exchange\CryptoExchangesResolver;
 use App\Services\Exchange\Exceptions\ExchangeException;
 use App\Services\Exchange\Dto\{Trade, TradePair};
@@ -12,15 +13,15 @@ use App\Services\Exchange\Routes\Contracts\RouteFinderServiceInterface;
 use App\Services\Exchange\Trading\Contracts\CalculateTradeServiceInterface;
 use Psr\Log\LoggerInterface;
 
-class RouteFinderService implements RouteFinderServiceInterface
+final class RouteFinderService implements RouteFinderServiceInterface
 {
     public const ORDERBOOK_LIMIT = 500;
 
-    protected $subject;
-    protected $target;
-    protected $amount;
-    protected $suitedPairs;
-    protected $cryptoExchange;
+    protected string $subject;
+    protected string $target;
+    protected float $amount;
+    protected array $suitedPairs;
+    protected CryptoExchangeInterface $cryptoExchange;
 
     public function __construct(
         protected CryptoExchangesResolver        $cryptoExchangesResolver,
