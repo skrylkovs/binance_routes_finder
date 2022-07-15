@@ -39,14 +39,12 @@ class ExchangeController extends Controller
         ];
 
         foreach ($data as $deal) {
-            $key = $deal["subject"] . " -> " .  $deal["target"];
+            $key = $deal["subject"] . "-" .  $deal["target"];
             $routes = $this->routeFinderService->createRoutes($deal["subject"], $deal["target"], $deal["quantity"]);
             $results[$key]["way"] = $this->routeFinderService->parseTotalQuantities($routes);
             $results[$key]["quantity"] = $deal["quantity"];
         }
 
-        print_r($results);
-        exit;
         return View::make('exchange', ['results' => $results]);
     }
 }

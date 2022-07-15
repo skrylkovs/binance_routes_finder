@@ -25,7 +25,7 @@ abstract class BaseCryptoExchange
     public function parseOrderBook(array $orderbook, string $column): Orderbook
     {
         foreach ($orderbook[$column] as $row) {
-            $orders[] = new OrderbookRow($row[0], $row[1]);
+            $orders[] = new OrderbookRow((float)$row[0], (float)$row[1]);
         }
 
         return new Orderbook($orders, OrderType::fromColumn($column));
