@@ -19,12 +19,12 @@ class ExchangeController extends Controller
             [
                 "subject" => "ETH",
                 "target" => "XEM",
-                "quantity" => 0.09
+                "quantity" => 0.009
             ],
             [
                 "subject" => "BTC",
                 "target" => "USDT",
-                "quantity" => 0.56
+                "quantity" => 0.056
             ],
             [
                 "subject" => "XLM",
