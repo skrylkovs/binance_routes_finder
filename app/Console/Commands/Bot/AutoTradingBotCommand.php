@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bot;
 
+use App\Services\Bot\Contracts\BotServiceInterface;
+use App\Services\Exchange\Contracts\CryptoExchangeInterface;
 use App\Services\Exchange\CryptoExchanges\Stream\BinanceWebsocket;
 use Illuminate\Console\Command;
 use Psr\Log\LoggerInterface;
@@ -24,6 +26,7 @@ class AutoTradingBotCommand extends Command
 
     public function __construct(
         protected BinanceWebsocket $binanceWebsocket,
+        protected BotServiceInterface $botService,
         protected LoggerInterface $logger,
     ) {
         parent::__construct();
@@ -31,6 +34,7 @@ class AutoTradingBotCommand extends Command
 
     public function handle()
     {
-        $this->binanceWebsocket->listenDepth("xlmeth", function(){});
+        $this->botService->setSettings()->run();
+        //$this->binanceWebsocket->listenDepth("xlmeth", function(){});
     }
 }

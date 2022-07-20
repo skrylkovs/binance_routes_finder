@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Services\Exchange\Routes;
 
 use App\Enum\Exchange\OrderType;
-use App\Services\Exchange\Contracts\OrdersServiceInterface;
+use App\Services\Exchange\Contracts\CryptoExchangeInterface;
 use App\Services\Exchange\CryptoExchangesResolver;
-use App\Services\Exchange\Exceptions\ExchangeException;
+use App\Services\Exchange\Exceptions\BotException;
 use App\Services\Exchange\Dto\{Trade, TradePair};
 use App\Services\Exchange\Routes\Contracts\RouteFinderServiceInterface;
 use App\Services\Exchange\Trading\Contracts\CalculateTradeServiceInterface;
@@ -21,7 +21,7 @@ final class RouteFinderService implements RouteFinderServiceInterface
     protected string $target;
     protected float $amount;
     protected array $suitedPairs;
-    protected OrdersServiceInterface $cryptoExchange;
+    protected CryptoExchangeInterface $cryptoExchange;
 
     public function __construct(
         protected CryptoExchangesResolver        $cryptoExchangesResolver,
@@ -125,7 +125,7 @@ final class RouteFinderService implements RouteFinderServiceInterface
                     $currentQuantity = $this->suitedPairs[$currency][$key]['resultQuantity'] = $this->calculateTradeService->calculateTargetQuantity($orderbook, $amount);
                 }
                 unset($currentQuantity);
-            } catch (ExchangeException $exception) {
+            } catch (BotException $exception) {
                 $this->logger->error("Catched exchange exception", [$exception]);
                 unset($this->suitedPairs[$currency]);
 

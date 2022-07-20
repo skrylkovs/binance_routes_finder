@@ -7,16 +7,16 @@ namespace App\Services\User\Orders\Dto;
 class Order
 {
     public function __construct(
-        protected int    $id,
-        protected float  $price,
-        protected float  $origQty,
-        protected float  $executedQty,
-        protected float  $avgPrice,
-        protected string $status,
-        protected string $type,
-        protected string $side,
-        protected int    $time,
-        protected int    $updateTime,
+        public readonly int    $id,
+        public readonly float  $price,
+        public readonly float  $origQty,
+        public readonly float  $executedQty,
+        public readonly float  $avgPrice,
+        public readonly string $status,
+        public readonly string $type,
+        public readonly string $side,
+        public readonly int    $time,
+        public readonly int    $updateTime,
     )
     {
     }

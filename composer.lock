@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52cfe8d45116bef9777b6f7c7d229265",
+    "content-hash": "4b0f61291f214e9f2e340786dd5d96cb",
     "packages": [
         {
             "name": "beyondcode/laravel-websockets",
@@ -4969,6 +4969,46 @@
                 "source": "https://github.com/ringcentral/psr7/tree/master"
             },
             "time": "2018-05-29T20:21:04+00:00"
+        },
+        {
+            "name": "skrylkovs/php-type-fixer",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/skrylkovs/php-type-fixer.git",
+                "reference": "c0fa0acdc55da15e87bbe0fde2489a3d28fbaaa9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/skrylkovs/php-type-fixer/zipball/c0fa0acdc55da15e87bbe0fde2489a3d28fbaaa9",
+                "reference": "c0fa0acdc55da15e87bbe0fde2489a3d28fbaaa9",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Skrylkovs\\Library\\": ""
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Sergei Skrylkov",
+                    "email": "skrylkovs@gmail.com"
+                }
+            ],
+            "description": "Skrylkovs casting by values format package",
+            "homepage": "https://github.com/skrylkovs/php-type-fixer",
+            "support": {
+                "source": "https://github.com/skrylkovs/php-type-fixer/tree/0.0.1",
+                "issues": "https://github.com/skrylkovs/php-type-fixer/issues"
+            },
+            "time": "2022-07-16T13:54:05+00:00"
         },
         {
             "name": "symfony/console",

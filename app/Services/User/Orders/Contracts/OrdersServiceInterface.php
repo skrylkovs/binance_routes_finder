@@ -4,17 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\User\Orders\Contracts;
 
-use ccxt\Exchange as CcxtBaseExchange;
-use Psr\Log\LoggerInterface;
-
+use App\Services\User\Orders\Dto\Orders;
 interface OrdersServiceInterface
 {
-    public function __construct(
-        LoggerInterface  $logger,
-        CcxtBaseExchange $ccxtBinanceExchange
-    );
-
-    public function fetchUserOrders(): array;
-
-    public function getOrders();
+    public function parseUserOrders(array $orders): Orders;
 }
