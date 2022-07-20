@@ -9,7 +9,7 @@ use App\Services\Exchange\Trading\Contracts\CalculateTradeServiceInterface;
 use App\Services\Exchange\Dto\Orderbook;
 use App\Services\Exchange\Exceptions\OrdersIsNotEnoughException;
 
-class CalculateTradeService implements CalculateTradeServiceInterface
+final class CalculateTradeService implements CalculateTradeServiceInterface
 {
     public function __construct(
         protected CryptoExchangeInterface $cryptoExchange,

@@ -7,7 +7,7 @@ namespace App\Services\Exchange;
 use App\Services\Exchange\Contracts\CryptoExchangeInterface;
 use App\Services\Exchange\Exceptions\UnknownCryptoExchangeException;
 
-class CryptoExchangesResolver
+final class CryptoExchangesResolver
 {
     /**
      * @var CryptoExchangeInterface[]
