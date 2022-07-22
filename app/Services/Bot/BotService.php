@@ -58,8 +58,10 @@ final class BotService implements BotServiceInterface
 
         try {
             $this->sellOrdersProcess($openedOrders->sell, $openedOrders->totalCount, $openedOrders->sellOrderMinutesAgo);
-            $this->historyOrdersProcess($allOrders->sell, $allOrders->totalCount, $allOrders->sellOrderMinutesAgo);
+            //$this->historyOrdersProcess($allOrders->sell, $allOrders->totalCount, $allOrders->sellOrderMinutesAgo);
         } catch (IterationBreakException $exception) {
+            echo $exception->getMessage() . PHP_EOL;
+
             return true;//$this->iterate();
         }
 
@@ -81,10 +83,10 @@ final class BotService implements BotServiceInterface
     protected function sellOrdersProcess(array $orders, int $totalOpenedCount, int $sellOrderMinutesAgo): void
     {
         if ($this->isItTimeToCreateDeal($totalOpenedCount, $sellOrderMinutesAgo) === true) {
-            $price = 1000;
+            $price = $this->settings->quantityFiat;
             $quantity = round(10 / $price, 8);
 
-            //$this->cryptoExchange->createOrder($this->settings->symbol, self::ORDER_TYPE, "BUY", $quantity, $price, self::TIME_IN_FORCE);
+            $this->cryptoExchange->createOrder($this->settings->symbol, self::ORDER_TYPE, "SELL", $quantity, $price, self::TIME_IN_FORCE);
 
             throw new IterationBreakException("Sell order has created, break iteration");
         }
@@ -93,12 +95,11 @@ final class BotService implements BotServiceInterface
     protected function historyOrdersProcess(array $orders, int $totalOpenedCount, int $sellOrderMinutesAgo): void
     {
         if ($this->isItTimeToCreateDeal($totalOpenedCount, $sellOrderMinutesAgo) === true) {
-            $price = 1000;
-            $quantity = round(10 / $price, 8);
+            $quantity = 10;
 
-            $this->cryptoExchange->createOrder($this->settings->symbol, self::ORDER_TYPE, "SELL", $quantity, $price, self::TIME_IN_FORCE);
+            $this->cryptoExchange->createOrder($this->settings->symbol, "MARKET", "BUY", $quantity, 0, self::TIME_IN_FORCE);
 
-            throw new IterationBreakException("Sell order has created, break iteration");
+            throw new IterationBreakException("Buy order has created, break iteration");
         }
     }
 

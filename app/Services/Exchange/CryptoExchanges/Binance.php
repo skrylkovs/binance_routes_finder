@@ -71,7 +71,15 @@ class Binance extends BaseCryptoExchange implements CryptoExchangeInterface
 
     public function createOrder(string $symbol, string $type, string $side, float $quantity, float $price, string $timeInForce): array
     {
-        return $this->fetch(self::BINANCE_API_CREATE_ORDER_METHOD, "private", ["symbol" => $symbol, "type" => $type, "side" => $side, "quantity" => $quantity, "price" => $price, "timeInForce" => $timeInForce], "POST");
+        $params = ["symbol" => $symbol, "type" => $type, "side" => $side];
+
+        if($type == "LIMIT"){
+            $params += ["quantity" => $quantity, "price" => $price, "timeInForce" => $timeInForce];
+        }elseif ($type == "MARKET"){
+            $params += ["quoteOrderQty" => $quantity];
+        }
+
+        return $this->fetch(self::BINANCE_API_CREATE_ORDER_METHOD, "private", $params, "POST");
     }
 
     /**
@@ -80,8 +88,6 @@ class Binance extends BaseCryptoExchange implements CryptoExchangeInterface
     protected function fetch(string $path, string $apiType = 'public', array $params = [], string $method = "GET"): array
     {
         try {
-            print_r($params);
-
             return $this->ccxtBinanceExchange->fetch2($path, $apiType, params: $params, method: $method);
         } catch (Throwable $exception) {
             $this->logger->error("Request error to exchange " . $this->getName(), [$exception, $path]);

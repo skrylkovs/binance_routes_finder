@@ -57,7 +57,7 @@ class AppServiceProvider extends ServiceProvider
                 array(
                     'apiKey' => env("BINANCE_API_KEY"),
                     'secret' => env("BINANCE_SECRET"),
-                    'verbose' => false
+                    'verbose' => true
                 )
             );
     }
